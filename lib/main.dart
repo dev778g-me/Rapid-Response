@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/route_manager.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:material_text_fields/theme/material_text_field_theme.dart';
+import 'package:rapidresponse/authscreen/wrapper.dart';
 import 'package:rapidresponse/spalshscreen/spalshscreen.dart';
 
 void main() async {
@@ -38,6 +39,6 @@ class MyApp extends StatelessWidget {
           colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
           useMaterial3: true,
         ),
-        home: Spalshscreen());
+        home: Wrapper());
   }
 }

@@ -48,6 +48,12 @@ dependencies:
   google_maps_flutter: ^2.9.0
   sliding_up_panel: ^2.0.0+1
   connectivity_plus: ^6.0.5
+  geolocator: ^13.0.1
+  yandex_geocoder: ^2.3.1
+  
+  location: ^6.0.2
+  flutter_polyline_points: ^2.1.0
+  geocoding: ^3.0.0
 
 dev_dependencies:
   flutter_test:
@@ -74,6 +80,7 @@ flutter:
   # To add assets to your application, add an assets section, like this:
   assets:
     - assets/animation/
+    - assets/images/
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see
