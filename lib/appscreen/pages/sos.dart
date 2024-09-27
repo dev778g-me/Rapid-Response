@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:material_text_fields/material_text_fields.dart';
 import 'package:material_text_fields/theme/material_text_field_theme.dart';
+import 'package:rapidresponse/appscreen/pages/numbercontact.dart';
 
 class Sospage extends StatelessWidget {
   const Sospage({super.key});
@@ -151,6 +152,62 @@ class Sospage extends StatelessWidget {
                     const SizedBox(
                       width: 20,
                     ),
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => Numbercontact()));
+                      },
+                      child: Container(
+                        height: 280,
+                        width: 260,
+                        decoration: BoxDecoration(
+                            color: Colors.red,
+                            borderRadius: BorderRadius.circular(20)),
+                        child: const Row(
+                          children: [
+                            Expanded(
+                                child: Padding(
+                              padding: EdgeInsets.symmetric(horizontal: 20),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  SizedBox(
+                                    height: 15,
+                                  ),
+                                  Text(
+                                    'Local Volunteer',
+                                    style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 20,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                  Text(
+                                    'Local Volunteer Number',
+                                    style: TextStyle(
+                                        color: Colors.white54,
+                                        fontSize: 15,
+                                        fontWeight: FontWeight.w500),
+                                  ),
+                                  Spacer(),
+                                  CircleAvatar(
+                                    backgroundColor: Colors.red,
+                                    child: Icon(Iconsax.bookmark_2),
+                                  ),
+                                  SizedBox(
+                                    height: 15,
+                                  )
+                                ],
+                              ),
+                            )),
+                          ],
+                        ),
+                      ),
+                    ),
+                    const SizedBox(
+                      width: 20,
+                    ),
                     Container(
                       height: 280,
                       width: 260,
@@ -169,14 +226,14 @@ class Sospage extends StatelessWidget {
                                   height: 15,
                                 ),
                                 Text(
-                                  'Local Volunteer',
+                                  'First Aid Emergency',
                                   style: TextStyle(
                                       color: Colors.white,
                                       fontSize: 20,
                                       fontWeight: FontWeight.bold),
                                 ),
                                 Text(
-                                  'Local Volunteer Number',
+                                  'First aid',
                                   style: TextStyle(
                                       color: Colors.white54,
                                       fontSize: 15,
@@ -185,7 +242,7 @@ class Sospage extends StatelessWidget {
                                 Spacer(),
                                 CircleAvatar(
                                   backgroundColor: Colors.red,
-                                  child: Icon(Iconsax.bookmark_2),
+                                  child: Icon(Iconsax.hospital),
                                 ),
                                 SizedBox(
                                   height: 15,

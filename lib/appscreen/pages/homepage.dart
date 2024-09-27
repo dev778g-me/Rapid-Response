@@ -21,10 +21,16 @@ class _HomepageState extends State<Homepage> {
 
   String cooedinates = 'no';
   Location _locationcontroller = new Location();
-  LatLng? _currentp = null;
-  LatLng? volp = null;
-  final _db = FirebaseDatabase.instance.ref().child('Volunteer/location');
+  LatLng? _currentp;
+  LatLng? volp;
+  LatLng? tool;
+  LatLng? tool1;
+  LatLng? voluenter;
 
+  final _db = FirebaseDatabase.instance.ref().child('Volunteer/location');
+  final _db1 = FirebaseDatabase.instance.ref().child('tool1');
+  final _db2 = FirebaseDatabase.instance.ref().child('tool2');
+  final _db3 = FirebaseDatabase.instance.ref().child('tool3');
   final Completer<GoogleMapController> _controller =
       Completer<GoogleMapController>();
 
@@ -55,6 +61,54 @@ class _HomepageState extends State<Homepage> {
         });
       }
       print(volp);
+    } catch (e) {
+      print('Error retrieving data: $e');
+    }
+  }
+
+  void fetchDatatool() async {
+    try {
+      DatabaseEvent event = await _db1.once();
+      final data = event.snapshot.value as Map<dynamic, dynamic>?;
+      if (data != null) {
+        setState(() {
+          double latitude = data['latitude'];
+          double longitude = data['longitude'];
+          tool = LatLng(latitude, longitude);
+        });
+      }
+    } catch (e) {
+      return null;
+    }
+  }
+
+  void fetchDatatool1() async {
+    try {
+      DatabaseEvent event = await _db2.once();
+      final data = event.snapshot.value as Map<dynamic, dynamic>?;
+      if (data != null) {
+        setState(() {
+          double latitude = data['latitude'];
+          double longitude = data['longitude'];
+          tool1 = LatLng(latitude, longitude);
+        });
+      }
+    } catch (e) {
+      print('Error retrieving data: $e');
+    }
+  }
+
+  void fetchDatatool2() async {
+    try {
+      DatabaseEvent event = await _db3.once();
+      final data = event.snapshot.value as Map<dynamic, dynamic>?;
+      if (data != null) {
+        setState(() {
+          double latitude = data['latitude'];
+          double longitude = data['longitude'];
+          tool1 = LatLng(latitude, longitude);
+        });
+      }
     } catch (e) {
       print('Error retrieving data: $e');
     }
@@ -94,37 +148,25 @@ class _HomepageState extends State<Homepage> {
       LatLng(37.42796133580664, -122.085749655962);
   static const LatLng tig = LatLng(20.287090, 83.146606);
 
-  // Future<void> _cameratoposition(LatLng pos) async {
-  //   final GoogleMapController controller = await _controller.future;
-  //   CameraPosition _newcampos = CameraPosition(target: pos, zoom: 13);
-
-  //   await controller.animateCamera(CameraUpdate.newCameraPosition(_newcampos));
-  // }
-
-  // void polyline() async {
-  //   PolylinePoints polylinePoints = PolylinePoints();
-  //   PolylineResult result = polylinePoints.getRouteBetweenCoordinates(googleApiKey: gooleapi,)
-  // }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         floatingActionButton: FloatingActionButton(
           backgroundColor: Colors.red,
           onPressed: () {
-            Navigator.push(
-                context, MaterialPageRoute(builder: (context) => Sospage()));
+            Navigator.push(context,
+                MaterialPageRoute(builder: (context) => const Sospage()));
           },
-          child: Icon(
+          child: const Icon(
             Icons.emergency,
             color: Colors.white,
           ),
         ),
         appBar: AppBar(
           title: const Text('Rapid Response'),
-          actions: [
+          actions: const [
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20),
+              padding: EdgeInsets.symmetric(horizontal: 20),
               child: Icon(Iconsax.search_normal),
             )
           ],
@@ -133,123 +175,167 @@ class _HomepageState extends State<Homepage> {
             ? const Center(
                 child: CircularProgressIndicator(),
               )
-            : Column(
-                children: [
-                  Container(
-                    height: 500,
-                    child: GoogleMap(
-                      onMapCreated: (GoogleMapController controller) =>
-                          _controller.complete(controller),
-                      initialCameraPosition:
-                          CameraPosition(zoom: 13, target: _currentp!),
-                      markers: {
-                        Marker(
-                            markerId: const MarkerId('current'),
-                            icon: BitmapDescriptor.defaultMarker,
-                            position: _currentp!),
-                        if (volp != null)
+            : SingleChildScrollView(
+                child: Column(
+                  children: [
+                    Container(
+                      height: 500,
+                      child: GoogleMap(
+                        onMapCreated: (GoogleMapController controller) =>
+                            _controller.complete(controller),
+                        initialCameraPosition:
+                            CameraPosition(zoom: 13, target: _currentp!),
+                        markers: {
                           Marker(
-                              markerId: const MarkerId('volunteer'),
+                              markerId: const MarkerId('current'),
                               icon: BitmapDescriptor.defaultMarker,
-                              position: volp!),
-                        const Marker(
-                            markerId: MarkerId('vasourceue'),
-                            icon: BitmapDescriptor.defaultMarker,
-                            position: _kGooglePlex)
-                      },
-                      mapType: MapType.normal,
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 15, vertical: 15),
-                    child: SingleChildScrollView(
-                      scrollDirection: Axis.horizontal,
-                      child: Row(
-                        children: [
-                          Container(
-                            padding: EdgeInsets.all(15),
-                            height: 150,
-                            width: 200,
-                            decoration: BoxDecoration(
-                                color: Colors.amber,
-                                borderRadius: BorderRadius.circular(20)),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  'Tools Location',
-                                  style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.white),
-                                ),
-                                Image.asset(
-                                  'assets/images/tools.png',
-                                  height: 100,
-                                  fit: BoxFit.contain,
-                                )
-                              ],
-                            ),
-                          ),
-                          SizedBox(
-                            width: 20,
-                          ),
-                          Container(
-                            padding: EdgeInsets.all(15),
-                            height: 150,
-                            width: 200,
-                            decoration: BoxDecoration(
-                                color: Colors.amber,
-                                borderRadius: BorderRadius.circular(20)),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  'Voluenteers',
-                                  style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.white),
-                                ),
-                                Image.asset(
-                                  'assets/images/volunteer-icon-29234.png',
-                                  height: 100,
-                                  fit: BoxFit.contain,
-                                )
-                              ],
-                            ),
-                          ),
-                          SizedBox(
-                            width: 20,
-                          ),
-                          Container(
-                            padding: EdgeInsets.all(15),
-                            height: 150,
-                            width: 200,
-                            decoration: BoxDecoration(
-                                color: Colors.amber,
-                                borderRadius: BorderRadius.circular(20)),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  'Snake Catcher',
-                                  style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.white),
-                                ),
-                                Image.asset(
-                                  'assets/images/snake-png-3651.png',
-                                  height: 100,
-                                  fit: BoxFit.contain,
-                                )
-                              ],
-                            ),
-                          )
-                        ],
+                              position: _currentp!),
+                          if (volp != null)
+                            Marker(
+                                markerId: const MarkerId('volunteer'),
+                                icon: BitmapDescriptor.defaultMarker,
+                                position: volp!),
+                          const Marker(
+                              markerId: MarkerId('vasourceue'),
+                              icon: BitmapDescriptor.defaultMarker,
+                              position: _kGooglePlex),
+                          if (tool != null)
+                            Marker(
+                                markerId: const MarkerId('2'),
+                                icon: BitmapDescriptor.defaultMarker,
+                                position: tool!),
+                          if (tool1 != null)
+                            Marker(
+                                markerId: const MarkerId('3'),
+                                icon: BitmapDescriptor.defaultMarker,
+                                position: tool1!),
+                        },
+                        mapType: MapType.normal,
                       ),
                     ),
-                  )
-                ],
+                    Padding(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 15, vertical: 15),
+                      child: SingleChildScrollView(
+                        scrollDirection: Axis.horizontal,
+                        child: Row(
+                          children: [
+                            GestureDetector(
+                              onTap: fetchDatatool,
+                              child: Container(
+                                padding: const EdgeInsets.all(15),
+                                height: 150,
+                                width: 200,
+                                decoration: BoxDecoration(
+                                    color: Colors.amber,
+                                    borderRadius: BorderRadius.circular(20)),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    const Text(
+                                      'Tools Location',
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          color: Colors.white),
+                                    ),
+                                    Image.asset(
+                                      'assets/images/tools.png',
+                                      height: 100,
+                                      fit: BoxFit.contain,
+                                    )
+                                  ],
+                                ),
+                              ),
+                            ),
+                            const SizedBox(
+                              width: 20,
+                            ),
+                            Container(
+                              padding: const EdgeInsets.all(15),
+                              height: 150,
+                              width: 200,
+                              decoration: BoxDecoration(
+                                  color: Colors.amber,
+                                  borderRadius: BorderRadius.circular(20)),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  const Text(
+                                    'Voluenteers',
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.white),
+                                  ),
+                                  Image.asset(
+                                    'assets/images/volunteer-icon-29234.png',
+                                    height: 100,
+                                    fit: BoxFit.contain,
+                                  )
+                                ],
+                              ),
+                            ),
+                            const SizedBox(
+                              width: 20,
+                            ),
+                            GestureDetector(
+                              onTap: fetchDatatool2,
+                              child: Container(
+                                padding: const EdgeInsets.all(15),
+                                height: 150,
+                                width: 200,
+                                decoration: BoxDecoration(
+                                    color: Colors.amber,
+                                    borderRadius: BorderRadius.circular(20)),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    const Text(
+                                      'Snake Catcher',
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          color: Colors.white),
+                                    ),
+                                    Image.asset(
+                                      'assets/images/snake-png-3651.png',
+                                      height: 100,
+                                      fit: BoxFit.contain,
+                                    )
+                                  ],
+                                ),
+                              ),
+                            ),
+                            const SizedBox(
+                              width: 20,
+                            ),
+                            Container(
+                              padding: const EdgeInsets.all(15),
+                              height: 150,
+                              width: 200,
+                              decoration: BoxDecoration(
+                                  color: Colors.amber,
+                                  borderRadius: BorderRadius.circular(20)),
+                              child: const Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    'Taxi Service',
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.white),
+                                  ),
+                                  Icon(
+                                    Iconsax.car,
+                                    size: 100,
+                                  )
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    )
+                  ],
+                ),
               ));
   }
 }
